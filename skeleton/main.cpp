@@ -56,7 +56,7 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
-	part = new Particle(Vector3(0, 0, 0), Vector3(0, 5, 0));
+	part = new Particle(Vector3(-10,10, 0), Vector3(0, 10, 0), Vector3(0, -9.8, 0), 0.99);
 	}
 
 
