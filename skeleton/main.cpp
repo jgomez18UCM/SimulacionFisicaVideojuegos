@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include "Particle.h"
+#include "RPGproyecyile.h"
 
 
 
@@ -31,6 +32,8 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 Particle* part;
+RPGproyecyile* proj;
+std::vector<RPGproyecyile*> projs;
 
 
 // Initialize physics engine
@@ -56,7 +59,8 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
-	part = new Particle(Vector3(-10,10, 0), Vector3(0, 10, 0), Vector3(0, -9.8, 0), 0.99);
+	//part = new Particle(Vector3(-10, 10, 0), Vector3(10, 0, 0), Vector3(0, 0.0109, 0), 0.99);
+	//proj = new RPGproyecyile(GetCamera()->getEye(), GetCamera()->getDir());
 	}
 
 
@@ -69,7 +73,9 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
-	part->integrate(t);
+	for (auto p : projs) {
+		p->integrate(t);
+	}
 }
 
 // Function to clean data
@@ -99,8 +105,9 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 	//case 'B': break;
 	//case ' ':	break;
-	case ' ':
+	case 'K':
 	{
+		projs.push_back(new RPGproyecyile(GetCamera()->getEye(), GetCamera()->getDir()));
 		break;
 	}
 	default:

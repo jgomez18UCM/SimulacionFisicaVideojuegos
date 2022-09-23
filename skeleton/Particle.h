@@ -10,7 +10,7 @@ public:
 	~Particle();
 
 	void integrate(double t);
-private:
+protected:
 	Vector3 vel, acc;
 	float damping;
 	physx::PxTransform pose;
