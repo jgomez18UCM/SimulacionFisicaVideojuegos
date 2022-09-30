@@ -11,7 +11,7 @@
 #include <iostream>
 
 #include "Particle.h"
-#include "RPGproyecyile.h"
+#include "Proyectile.h"
 
 
 
@@ -32,8 +32,8 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 Particle* part;
-RPGproyecyile* proj;
-std::vector<RPGproyecyile*> projs;
+Projectile* proj;
+std::vector<Projectile*> projs;
 
 
 // Initialize physics engine
@@ -105,11 +105,14 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 	//case 'B': break;
 	//case ' ':	break;
-	case 'K':
+	case '1':
 	{
-		projs.push_back(new RPGproyecyile(GetCamera()->getEye(), GetCamera()->getDir()));
+		projs.push_back(new Projectile(GetCamera()->getEye(), GetCamera()->getDir(), Projectile::RPG));
 		break;
 	}
+	case '2':
+		projs.push_back(new Projectile(GetCamera()->getEye(), GetCamera()->getDir(), Projectile::Pistol));
+		break;
 	default:
 		break;
 	}

@@ -7,7 +7,7 @@ class Particle
 {
 public:
 	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc, float damp);
-	~Particle();
+	virtual ~Particle();
 
 	void integrate(double t);
 protected:
