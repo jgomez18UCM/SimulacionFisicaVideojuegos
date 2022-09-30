@@ -30,9 +30,9 @@ PxPvd*                  gPvd        = NULL;
 
 PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
-ContactReportCallback gContactReportCallback;
-Particle* part;
-Projectile* proj;
+ContactReportCallback   gContactReportCallback;
+Particle*				suelo;
+Projectile*				proj;
 std::vector<Projectile*> projs;
 
 
@@ -59,9 +59,9 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
-	//part = new Particle(Vector3(-10, 10, 0), Vector3(10, 0, 0), Vector3(0, 0.0109, 0), 0.99);
+	suelo = new Floor(Vector3(0, -10, 0), 1000, 1000);
 	//proj = new RPGproyecyile(GetCamera()->getEye(), GetCamera()->getDir());
-	}
+}
 
 
 // Function to configure what happens in each step of physics

@@ -22,14 +22,14 @@ public:
 				vel = 300 * dir;
 				acc = Vector3(0, -9.8, 0);
 				damping = 0.9;
-
+				this->renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(3)), &this->pose, Vector4(.9, .9, .9, 1));
 				break;
 			default:
 				break;
 		}
 	}
 
-	virtual ~Projectile();
+	virtual ~Projectile(){};
 
 
 protected:
