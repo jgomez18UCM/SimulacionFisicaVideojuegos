@@ -73,8 +73,15 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
-	for (auto p : projs) {
-		p->integrate(t);
+	for (auto it = projs.begin(); it != projs.end();) {
+		(*it)->integrate(t);
+		if (!(*it)->isAlive()) {
+			delete (*it);
+			it = projs.erase(it);
+		}
+		else {
+			++it;
+		}
 	}
 }
 
@@ -94,7 +101,12 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 	
 	gFoundation->release();
+
+	for (auto it = projs.begin(); it != projs.end();) {
+		delete (*it);
+		it = projs.erase(it);
 	}
+}
 
 // Function called when a key is pressed
 void keyPress(unsigned char key, const PxTransform& camera)

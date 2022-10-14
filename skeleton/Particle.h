@@ -10,11 +10,13 @@ public:
 	virtual ~Particle();
 
 	void integrate(double t);
+	bool isAlive() { return timeLimit > 0; }
 protected:
 	Vector3 vel, acc;
 	float damping;
 	physx::PxTransform pose;
 	RenderItem* renderItem;
+	double timeLimit;
 };
 
 class Floor : public Particle {
