@@ -7,11 +7,10 @@
     <ClCompile Include="Render\Render.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="Particle.cpp" />
-    <ClCompile Include="SimpleParticleSystem.cpp" />
+    <ClCompile Include="RenderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -26,7 +25,6 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Proyectile.h" />
     <ClInclude Include="ParticleGenerator.h" />
-    <ClInclude Include="SimpleParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
