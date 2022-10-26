@@ -11,6 +11,8 @@
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="RenderUtils.cpp" />
+    <ClCompile Include="Firework.cpp" />
+    <ClCompile Include="SphereParticleGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -28,6 +30,8 @@
     <ClInclude Include="UniformParticleGenerator.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="GaussianParticleGenerator.h" />
+    <ClInclude Include="Firework.h" />
+    <ClInclude Include="SphereParticleGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

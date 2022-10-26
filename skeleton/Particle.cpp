@@ -1,12 +1,12 @@
 #include "Particle.h"
 
-Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc, float damp,Vector4 color, physx::PxShape* sh ) {
+Particle::Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc, float damp, float time, Vector4 color, physx::PxShape* sh ) {
 	this->vel = Vel;
 	this->pose = physx::PxTransform(Pos);
 	this->acc = Acc;
 	this->damping = damp;
 	this->renderItem = new RenderItem(sh, &this->pose, color);
-	this->timeLimit = 10.0f;
+	this->timeLimit = time;
 }
 
 Particle::~Particle() {

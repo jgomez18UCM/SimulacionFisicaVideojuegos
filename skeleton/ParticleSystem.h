@@ -2,6 +2,9 @@
 #include "Particle.h"
 #include "UniformParticleGenerator.h"
 #include "GaussianParticleGenerator.h"
+#include "SphereParticleGenerator.h"
+#include "Firework.h"
+#include <memory>
 class ParticleSystem{
 protected:
 	std::list<Particle*> _particles;
@@ -23,6 +26,12 @@ public:
 			(*it)->integrate(t);
 
 			if (!(*it)->isAlive()) {
+				Firework* f = dynamic_cast<Firework*>(*it);
+				if (f != nullptr) {
+					for (auto i : f->explode() ){
+						_particles.push_back(i);
+					}
+				}
 				delete (*it);
 				it = _particles.erase(it);
 			}
@@ -38,10 +47,16 @@ public:
 				return g;
 		}
 	};
-	void generateFireworksSystem() {  };
+	void generateFireworksSystem() { 
+		Particle* i = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 2);
+		std::shared_ptr<SphereParticleGenerator> p;
+		p.reset(new SphereParticleGenerator(20, { 0,30,0 }, i, 20));
+		Firework* f = new Firework(pos, { 0,10,0 }, { 0,0,0 }, 0.99, 3, { 1,0,0,1 }, CreateShape(physx::PxSphereGeometry(1)), {p});
+		_particles.push_back(f);
+	};
 	void generateFogSystem() {
-		_generators.push_back(new GaussianParticleGenerator("Fog", CreateShape(physx::PxSphereGeometry(.5)), {.5,.5,1,1},
-			pos, { 0,0,0 }, { 0,0,0 }, 75, { 0.1,10,10 }, { 0.1,0.1,0.1 }, 3));
+		Particle* p = new Particle(pos, { 0,0,0 }, { 0,0,0 }, 0.99, 5, { .5,.5,1,1 }, CreateShape(physx::PxSphereGeometry(.5)));
+		_generators.push_back(new SphereParticleGenerator(20,{0,0,0},p,20));
 	};
 	virtual ~ParticleSystem() {
 		for (auto it = _particles.begin(); it != _particles.end(); it = _particles.erase(it)) {

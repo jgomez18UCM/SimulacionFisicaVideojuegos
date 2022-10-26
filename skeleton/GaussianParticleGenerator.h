@@ -3,14 +3,12 @@
 #include <random>
 class GaussianParticleGenerator : public ParticleGenerator {
 public:
-	GaussianParticleGenerator(std::string name, physx::PxShape* model, Vector4 color, Vector3 meanPos, Vector3 meanVel,
-		Vector3 meanAcc, double genProb, Vector3 posDeviation, Vector3 velDeviation, int numPart) {
+	GaussianParticleGenerator(std::string name, Particle* model, double genProb, Vector3 posDeviation, Vector3 velDeviation, int numPart) {
 		setName(name);
-		_shape = model;
-		_modelColor = color;
-		_mean_pos = meanPos;
-		_mean_vel = meanVel;
-		_mean_acc = meanAcc;
+		_model = model;
+		_mean_pos = model->getPos();
+		_mean_vel = model->getVel();
+		_mean_acc = model->getAcc();
 		_generation_probability = genProb;
 		_std_dev_vel = velDeviation;
 		_std_dev_pos = posDeviation;
@@ -37,7 +35,9 @@ public:
 				Vector3 pos = { px(random_generator), py(random_generator), pz(random_generator) };
 				Vector3 vel = { vx(random_generator), vy(random_generator), vz(random_generator) };
 
-				Particle* p = new Particle(pos, vel, _mean_acc, 0.99, _modelColor,  _shape);
+				Particle* p = _model->clone();
+				p->setPos(pos);
+				p->setVel(vel);
 				l.push_back(p);
 			}
 		}

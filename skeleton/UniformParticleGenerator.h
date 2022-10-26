@@ -5,14 +5,11 @@
 class UniformParticleGenerator : public ParticleGenerator {
 
 public:
-	UniformParticleGenerator(std::string name, Particle* model, Vector3 meanPos, double genProb, Vector3 posWidth, Vector3 velWidth, int numPart) {
+	UniformParticleGenerator(std::string name, Particle* model, double genProb, Vector3 posWidth, Vector3 velWidth, int numPart) {
 		setName(name);
 		setParticle(model);
-		/*_shape = model;
-		_modelColor = modelColor;*/
 		_mean_pos = _model->getPos();
 		_mean_vel = _model->getVel();
-		//_mean_acc = meanAcc;
 		_generation_probability = genProb;
 		_vel_width = velWidth;
 		_pos_width = posWidth;
