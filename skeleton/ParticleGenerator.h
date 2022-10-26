@@ -11,12 +11,15 @@ public:
 	std::string getName() const { return _name; }
 	void setName(std::string name) { _name = name; }
 	void setParticle(Particle* part) { _model = part; }
-	virtual ~ParticleGenerator() = 0;
+	virtual ~ParticleGenerator(){};
 
 protected:
-	Vector3 _mean_pos, _mean_vel;
+	Vector3 _mean_pos, _mean_vel, _mean_acc;
+	Vector4 _modelColor;
 	double _generation_probability;
-	Particle* _model;
+    Particle* _model;
 	int _num_particles;
 	std::string _name;
+	physx::PxShape* _shape;
+	bool active = true;
 };

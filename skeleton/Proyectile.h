@@ -7,7 +7,7 @@ public:
 		RPG,
 		Pistol
 	};
-	Projectile(Vector3 Pos, Vector3 dir, Types type) : Particle(Pos, dir, Vector3(0,0,0), 0.99) {
+	Projectile(Vector3 Pos, Vector3 dir, Types type) : Particle(Pos, dir, Vector3(0, 0, 0), 0.99, { 1,1,1,1 },CreateShape(physx::PxSphereGeometry(1))) {
 
 		DeregisterRenderItem(this->renderItem);
 		auto cameraQ = GetCamera()->getTransform().q;

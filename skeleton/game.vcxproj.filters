@@ -25,6 +25,9 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Proyectile.h" />
     <ClInclude Include="ParticleGenerator.h" />
+    <ClInclude Include="UniformParticleGenerator.h" />
+    <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="GaussianParticleGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

@@ -12,7 +12,7 @@
 
 #include "Particle.h"
 #include "Proyectile.h"
-
+#include "ParticleSystem.h"
 
 
 using namespace physx;
@@ -34,7 +34,7 @@ ContactReportCallback   gContactReportCallback;
 Particle*				suelo;
 Projectile*				proj;
 std::vector<Projectile*> projs;
-
+ParticleSystem* sys;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -59,7 +59,9 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
-	suelo = new Floor(Vector3(0, -10, 0), 1000, 1000);
+	//suelo = new Floor(Vector3(0, -10, 0), 1000, 1000);
+	sys = new ParticleSystem({ 0,0,0 });
+	sys->generateFogSystem();
 	//proj = new RPGproyecyile(GetCamera()->getEye(), GetCamera()->getDir());
 }
 
@@ -83,6 +85,7 @@ void stepPhysics(bool interactive, double t)
 			++it;
 		}
 	}
+	sys->update(t);
 }
 
 // Function to clean data
@@ -106,6 +109,7 @@ void cleanupPhysics(bool interactive)
 		delete (*it);
 		it = projs.erase(it);
 	}
+	delete sys;
 }
 
 // Function called when a key is pressed
