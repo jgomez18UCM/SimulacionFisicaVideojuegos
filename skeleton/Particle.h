@@ -6,14 +6,14 @@
 class Particle
 {
 public:
-	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc, float damp, float time = 5.0f, Vector4 color = {1,1,1,1}, physx::PxShape* sh = CreateShape(physx::PxSphereGeometry(1)));
+	Particle(Vector3 Pos, Vector3 Vel, Vector3 Acc, float damp, float time = 5.0f, Vector4 color = {1,1,1,1}, physx::PxShape* sh = CreateShape(physx::PxSphereGeometry(1)), bool render = true);
 	
 	virtual ~Particle();
 
 	virtual void integrate(double t);
 	virtual bool isAlive() { return timeLimit > 0; }
 	virtual Particle* clone() {
-		return new Particle(pose.p, vel, acc, damping, timeLimit, renderItem->color, renderItem->shape);
+		return new Particle(pose.p, vel, acc, damping, timeLimit, color, shape);
 	};
 	virtual void setVel(Vector3 vel) { this->vel = vel; };
 	virtual void setPos(Vector3 pos) { this->pose.p = pos; };
@@ -23,6 +23,8 @@ public:
 	virtual Vector3 getVel() { return this->vel; };
 	virtual Vector3 getAcc() { return this->acc; };
 protected:
+	Vector4 color;
+	physx::PxShape* shape;
 	Vector3 vel, acc;
 	float damping;
 	physx::PxTransform pose;

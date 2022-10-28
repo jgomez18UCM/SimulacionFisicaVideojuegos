@@ -129,6 +129,12 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case '2':
 		projs.push_back(new Projectile(GetCamera()->getEye(), GetCamera()->getDir(), Projectile::Pistol));
 		break;
+	case '3':
+		sys->generateFireworksSystem();
+		break;
+	case '4':
+		sys->generateFogSystem();
+		break;
 	default:
 		break;
 	}

@@ -48,18 +48,18 @@ public:
 		}
 	};
 	void generateFireworksSystem() { 
-		Particle* i = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 2);
+		Particle* i = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 2, {0,1,0,1}, CreateShape(physx::PxSphereGeometry(1)), false);
 
 		std::shared_ptr<SphereParticleGenerator> p;
 		p.reset(new SphereParticleGenerator(20, { 0,30,0 }, i, 20));
-		Firework* f = new Firework(pos, { 0,10,0 }, { 0,0,0 }, 0.99, 3, { 1,0,0,1 }, CreateShape(physx::PxSphereGeometry(1)), {p});
+		Firework* f = new Firework(pos, { 0,20,0 }, { 0,0,0 }, 0.99, 1.5, { 1,0,0,1 }, CreateShape(physx::PxSphereGeometry(3)), {p});
 		_particles.push_back(f);
 
 
 	};
 	void generateFogSystem() {
-		Particle* p = new Particle(pos, { 0,0,0 }, { 0,0,0 }, 0.99, 5, { .5,.5,1,1 }, CreateShape(physx::PxSphereGeometry(.5)));
-		_generators.push_back(new SphereParticleGenerator(20,{0,0,0},p,20));
+		Particle* p = new Particle(pos, { 0,0,0 }, { 0,0,0 }, 0.99, 5, { .7,.7,.7,1 }, CreateShape(physx::PxSphereGeometry(.5)), false);
+		_generators.push_back(new GaussianParticleGenerator("Fog", p, 0.75, {10,10,10}, {1,1,1},1000));
 	};
 	virtual ~ParticleSystem() {
 		for (auto it = _particles.begin(); it != _particles.end(); it = _particles.erase(it)) {
