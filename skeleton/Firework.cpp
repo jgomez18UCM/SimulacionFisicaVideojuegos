@@ -1,7 +1,7 @@
 #include "Firework.h"
 
-Firework::Firework(Vector3 Pos, Vector3 Vel, Vector3 Acc, float damp, float time, Vector4 color, physx::PxShape* sh, std::list<std::shared_ptr<ParticleGenerator>> gens) :
-		Particle(Pos,Vel,Acc,damp,time,color,sh), _gens(gens)
+Firework::Firework(Vector3 Pos, Vector3 Vel, Vector3 Acc, float damp, float mass, float time, Vector4 color, physx::PxShape* sh, std::list<std::shared_ptr<ParticleGenerator>> gens) :
+		Particle(Pos,Vel,Acc,damp,mass,time,color,sh), _gens(gens)
 {
 }
 
