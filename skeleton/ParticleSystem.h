@@ -58,8 +58,10 @@ public:
 
 	};
 	void generateFogSystem() {
-		Particle* p = new Particle(pos, { 0,0,0 }, { 0,0,0 }, 0.99, 5, { .7,.7,.7,1 }, CreateShape(physx::PxSphereGeometry(.5)), false);
-		_generators.push_back(new GaussianParticleGenerator("Fog", p, 0.75, {10,10,10}, {1,1,1},1000));
+		if (getParticleGenerator("Fog") == nullptr) {
+			Particle* p = new Particle(pos, { 0,0,0 }, { 0,0,0 }, 0.99, 5, { .7,.7,.7,1 }, CreateShape(physx::PxSphereGeometry(.5)), false);
+			_generators.push_back(new GaussianParticleGenerator("Fog", p, 0.75, { 10,10,10 }, { 1,1,1 }, 1000));
+		}
 	};
 	virtual ~ParticleSystem() {
 		for (auto it = _particles.begin(); it != _particles.end(); it = _particles.erase(it)) {
