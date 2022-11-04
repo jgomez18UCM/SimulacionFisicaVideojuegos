@@ -19,20 +19,23 @@ public:
 	virtual void setPos(Vector3 pos) { this->pose.p = pos; };
 	virtual void setAcc(Vector3 acc) { this->acc = acc; };
 	virtual void setMass(float mass) {
-		if (mass <= 0) return;
+		if (mass <= 0) inverse_mass = 0;
 		inverse_mass = 1.0f / mass;
+		this->mass = mass;
 	}
 	virtual void clearForce() { force*=0; }
 	virtual void addForce(Vector3 f) { force += f; }
 	virtual Vector3 getPos() { return this->pose.p; };
 	virtual Vector3 getVel() { return this->vel; };
 	virtual Vector3 getAcc() { return this->acc; };
+	virtual float getInvMass() { return this->inverse_mass; };
+	virtual float getMass() { return mass; };
 protected:
 	Vector4 color;
 	physx::PxShape* shape;
 	Vector3 vel, acc;
 	Vector3 force;
-	float inverse_mass;
+	float inverse_mass, mass;
 	float damping;
 	physx::PxTransform pose;
 	RenderItem* renderItem;

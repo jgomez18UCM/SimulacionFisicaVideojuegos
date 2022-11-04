@@ -4,11 +4,14 @@
 #include "GaussianParticleGenerator.h"
 #include "SphereParticleGenerator.h"
 #include "Firework.h"
+#include "ForceGenerator.h"
+#include "ParticleForceRegistry.h"
 #include <memory>
 class ParticleSystem{
 protected:
 	std::list<Particle*> _particles;
 	std::list<ParticleGenerator*> _generators;
+	ParticleForceRegistry forces;
 	Vector3 pos;
 public:
 	ParticleSystem(Vector3 Pos)  {
@@ -22,6 +25,8 @@ public:
 			}
 		}
 
+		forces.updateForces(t);
+
 		for (auto it = _particles.begin(); it != _particles.end();) {
 			(*it)->integrate(t);
 
@@ -32,6 +37,7 @@ public:
 						_particles.push_back(i);
 					}
 				}
+				forces.deleteParticleregistry(*it);
 				delete (*it);
 				it = _particles.erase(it);
 			}
@@ -63,6 +69,13 @@ public:
 			_generators.push_back(new GaussianParticleGenerator("Fog", p, 0.75, { 10,10,10 }, { 1,1,1 }, 1000));
 		}
 	};
+	void generateGravityDemo() {
+		Particle* part = new Particle({ 10,10,10 }, { 0,0,0 }, { 0,0,0 },
+			0.99, 10, 10, { 1,0,0,1 }, CreateShape(physx::PxSphereGeometry(10)), true);
+		GravityForceGenerator* gen = new GravityForceGenerator(Vector3(0,-9.8,0), 100);
+		forces.addRegistry(gen, part);
+		_particles.push_back(part);
+	}
 	virtual ~ParticleSystem() {
 		for (auto it = _particles.begin(); it != _particles.end(); it = _particles.erase(it)) {
 			delete (*it);

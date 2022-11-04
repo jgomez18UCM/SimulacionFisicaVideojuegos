@@ -13,6 +13,7 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Firework.cpp" />
     <ClCompile Include="SphereParticleGenerator.cpp" />
+    <ClCompile Include="ForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
