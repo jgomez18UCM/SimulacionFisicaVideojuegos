@@ -76,6 +76,22 @@ public:
 		forces.addRegistry(gen, part);
 		_particles.push_back(part);
 	}
+	void generateWindDemo() {
+		Particle* part = new Particle({ 10,10,10 }, { 0,0,0 }, { 0,0,0 },
+			0.99, 10, 100000, { 1,0,0,1 }, CreateShape(physx::PxSphereGeometry(10)), true);
+		WindForceGenerator* gen = new WindForceGenerator(Vector3(5, 0, 0), 1,0.1);
+		forces.addRegistry(gen, part);
+		_particles.push_back(part);
+	}
+	void generateTwisterDemo() {
+		Particle* part = new Particle({ 10,0,10 }, { 0,0,0 }, { 0,0,0 },
+			0.99, 10, 100000, { 1,0,0,1 }, CreateShape(physx::PxSphereGeometry(10)), true);
+		Particle* part2 = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 },
+			0.99, 10, 100000, { 1,0,0,1 }, CreateShape(physx::PxBoxGeometry(1,1,1)), true);
+		TwisterForceGenerator* gen = new TwisterForceGenerator(Vector3(0, 0, 0), 1, 0.1, 0.35);
+		forces.addRegistry(gen, part);
+		_particles.push_back(part);
+	}
 	virtual ~ParticleSystem() {
 		for (auto it = _particles.begin(); it != _particles.end(); it = _particles.erase(it)) {
 			delete (*it);
