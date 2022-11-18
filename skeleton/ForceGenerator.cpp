@@ -42,3 +42,15 @@ void TwisterForceGenerator::updateForce(Particle* particle, double duration)
 	_windVel = _Kt *  Vector3(-(dist.z) - (dist.x), 50 - (dist.y), dist.x - (dist.z));
 	WindForceGenerator::updateForce(particle, duration);
 }
+
+void ExplosionForceGenerator::updateForce(Particle* p, double duration)
+{
+	if (p->getInvMass() <= 1e-10f) return;
+	Vector3 distV =   p->getPos() - _center;
+	
+	float dist = distV.normalize();
+	float r = dist*dist;
+	if (dist == 0) dist = 1e-5;
+	Vector3 force = (_k / r) * distV *exp(-t/_kt);
+	if(dist <= _radius) p->addForce(force);
+}

@@ -92,6 +92,18 @@ public:
 		forces.addRegistry(gen, part);
 		_particles.push_back(part);
 	}
+	void generateExpDemo() {
+		Particle* part = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 1, 100000, { 0,0,1,1 });
+		Particle* model = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 10, 25, { 1,1,1,1 }, CreateShape(physx::PxSphereGeometry(1)), false);
+		ParticleGenerator* gen = new GaussianParticleGenerator("JAJA", model, 100, {2,2,2},{0.00001,0.00001,0.000001},10);
+		ExplosionForceGenerator* exp = new ExplosionForceGenerator({ 0,0,0 }, 10, 100, .25);
+		for (auto p : gen->generateParticles()) {
+			forces.addRegistry(exp, p);
+			_particles.push_back(p);
+		}
+		delete gen;
+	}
+
 	virtual ~ParticleSystem() {
 		for (auto it = _particles.begin(); it != _particles.end(); it = _particles.erase(it)) {
 			delete (*it);

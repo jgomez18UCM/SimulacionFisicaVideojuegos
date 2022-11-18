@@ -50,3 +50,16 @@ protected:
 	float _Kt;
 };
 
+class ExplosionForceGenerator : public ForceGenerator {
+public:
+	ExplosionForceGenerator(Vector3 center, float radius, float k, double kt) : _center(center), _radius(radius), _k(k), _kt(kt), _timePassed(0.0) {};
+	~ExplosionForceGenerator() {};
+	void updateForce(Particle* p, double duration) override;
+protected:
+	Vector3 _center;
+	float _radius;
+	float _k;
+	double _kt;
+	double _timePassed;
+};
+
