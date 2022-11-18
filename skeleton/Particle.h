@@ -20,7 +20,7 @@ public:
 	virtual void setAcc(Vector3 acc) { this->acc = acc; };
 	virtual void setMass(float mass) {
 		if (mass <= 0) inverse_mass = 0;
-		inverse_mass = 1.0f / mass;
+		else inverse_mass = 1.0f / mass;
 		this->mass = mass;
 	}
 	virtual void clearForce() { force*=0; }

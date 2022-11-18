@@ -38,6 +38,7 @@ void DragForceGenerator::updateForce(Particle* particle, double duration)
 void TwisterForceGenerator::updateForce(Particle* particle, double duration)
 {
 	Vector3 pos = particle->getPos();
-	_windVel = _Kt *  Vector3(-(pos.z - _center.z) - 0.2, 10 - (pos.y - _center.y), pos.x - _center.x - 0.2);
+	Vector3 dist = pos - _center;
+	_windVel = _Kt *  Vector3(-(dist.z) - (dist.x), 50 - (dist.y), dist.x - (dist.z));
 	WindForceGenerator::updateForce(particle, duration);
 }

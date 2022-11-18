@@ -88,7 +88,7 @@ public:
 			0.99, 10, 100000, { 1,0,0,1 }, CreateShape(physx::PxSphereGeometry(10)), true);
 		Particle* part2 = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 },
 			0.99, 10, 100000, { 1,0,0,1 }, CreateShape(physx::PxBoxGeometry(1,1,1)), true);
-		TwisterForceGenerator* gen = new TwisterForceGenerator(Vector3(0, 0, 0), 1, 0.1, 0.35);
+		TwisterForceGenerator* gen = new TwisterForceGenerator(Vector3(0, 0, 0), 1, 0.1, 0.75);
 		forces.addRegistry(gen, part);
 		_particles.push_back(part);
 	}
