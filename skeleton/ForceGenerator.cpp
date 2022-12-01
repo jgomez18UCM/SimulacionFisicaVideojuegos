@@ -86,3 +86,50 @@ AnchoredSpringFG::~AnchoredSpringFG()
 {
 	delete _other;
 }
+
+BungeeForceGenerator::BungeeForceGenerator(Particle* other, float k, float resting_length) :
+	SpringForceGenerator(other,k,resting_length){}
+
+void BungeeForceGenerator::updateForce(Particle* p, double duration)
+{
+	if (fabs(p->getInvMass()) <= 1e-10) return;
+
+	Vector3 force = _other->getPos() - p->getPos();
+
+	const float length = force.normalize();
+	const float delta_x = length - _resting_length;
+
+	if (delta_x <= 0.0f) return;
+
+	force *= delta_x * _k;
+
+	p->addForce(force);
+}
+
+BuoyancyForceGenerator::BuoyancyForceGenerator(float height, float V, float d, Particle* liquid_surface) :
+	_height(height), _volume(V), _density(d), _liquid_particle(liquid_surface)
+{
+}
+
+void BuoyancyForceGenerator::updateForce(Particle* p, double duration)
+{
+	if (fabs(p->getInvMass()) <= 1e-10) return;
+
+	float h = p->getPos().y;
+	float h0 = _liquid_particle->getPos().y;
+
+	Vector3 f(0,0,0);
+	float immersed = 0.0;
+	if (h0 - h > _height * 0.5) {
+		immersed = 1.0;
+	}
+	else if (h - h0 > _height * 0.5) {
+		immersed = 0.0;
+	}
+	else {
+		immersed = (h0 - h) / _height + 0.5;
+	}
+
+	f.y = _density * _volume * immersed * 9.8;
+	p->addForce(f);
+}

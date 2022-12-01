@@ -144,6 +144,35 @@ public:
 		_forceGens.push_back(spring2);
 	}
 
+	void generateBungeeDemo() {
+		Particle* p1 = new Particle({ 10,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 5, 1e10);
+		Particle* p2 = new Particle({ -10,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 5, 1e10, { 1,0,1,1 });
+		BungeeForceGenerator* spring1 = new BungeeForceGenerator(p1, 2, 10);
+		BungeeForceGenerator* spring2 = new BungeeForceGenerator(p2, 2, 10);
+		_forceReg.addRegistry(spring1, p2);
+		_forceReg.addRegistry(spring2, p1);
+		DragForceGenerator* drag = new DragForceGenerator(.05);
+		_forceReg.addRegistry(drag, p1);
+		_forceReg.addRegistry(drag, p2);
+		_particles.push_back(p1);
+		_particles.push_back(p2);
+		_forceGens.push_back(drag);
+		_forceGens.push_back(spring1);
+		_forceGens.push_back(spring2);
+	}
+
+	void generateBuoyancyDemo() {
+		Particle* liquid = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 0, 1e10, { 0,0,1,1 }, CreateShape(physx::PxBoxGeometry(20, 2, 20)));
+		Particle* p = new Particle({ 0,-5, 0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 5, 1e10, { 1,0,0,1 }, CreateShape(physx::PxBoxGeometry(3, 3, 3)));
+
+		BuoyancyForceGenerator* bg = new BuoyancyForceGenerator(5, 27, 1, liquid);
+		GravityForceGenerator* gg = new GravityForceGenerator(Vector3(0,-9.8,0), 0);
+		_forceReg.addRegistry(bg, p);
+		_forceReg.addRegistry(gg, p);
+		_forceGens.push_back(gg);
+		_forceGens.push_back(bg);
+		_particles.push_back(p);
+	}
 	virtual ~ParticleSystem() {
 		for (auto it = _particles.begin(); it != _particles.end(); it = _particles.erase(it)) {
 			delete (*it);

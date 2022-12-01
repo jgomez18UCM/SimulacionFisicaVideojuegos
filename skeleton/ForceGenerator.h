@@ -78,6 +78,26 @@ protected:
 class AnchoredSpringFG : public SpringForceGenerator {
 public:
 	AnchoredSpringFG(Vector3& position, float k, float resting_length);
-	~AnchoredSpringFG();
+	virtual ~AnchoredSpringFG();
+};
+
+class BungeeForceGenerator : public SpringForceGenerator {
+public:
+	BungeeForceGenerator(Particle* other, float k, float resting_length);
+	virtual ~BungeeForceGenerator() {};
+	void updateForce(Particle* p, double duration) override;
+};
+
+class BuoyancyForceGenerator : public ForceGenerator {
+public: 
+	BuoyancyForceGenerator(float height, float V, float d, Particle* liquid_surface);
+	virtual ~BuoyancyForceGenerator() {};
+	void updateForce(Particle* p, double duration) override;
+
+protected:
+	float _height;
+	float _volume;
+	float _density;
+	Particle* _liquid_particle;
 };
 
