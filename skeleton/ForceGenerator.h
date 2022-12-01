@@ -63,3 +63,21 @@ protected:
 	double _timePassed;
 };
 
+class SpringForceGenerator : public ForceGenerator {
+public:
+	SpringForceGenerator(Particle* other, float k, float resting_length);
+	virtual ~SpringForceGenerator() {};
+	void updateForce(Particle* p, double duration) override;
+
+protected:
+	float _k;
+	float _resting_length;
+	Particle* _other;
+};
+
+class AnchoredSpringFG : public SpringForceGenerator {
+public:
+	AnchoredSpringFG(Vector3& position, float k, float resting_length);
+	~AnchoredSpringFG();
+};
+

@@ -25,9 +25,10 @@ Particle::~Particle() {
 
 void Particle::integrate(double t) {
 	if (inverse_mass <= 1e-96f) return;
-	this->pose.p += this->vel * t;
+	
 	auto momentAcc = acc + force * inverse_mass;
 	this->vel = this->vel * pow(this->damping, t) + momentAcc * t ;
 	this->timeLimit -= t;
+	this->pose.p += this->vel * t;
 	clearForce();
 }

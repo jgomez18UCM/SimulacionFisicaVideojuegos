@@ -61,7 +61,7 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 	//suelo = new Floor(Vector3(0, -10, 0), 1000, 1000);
 	sys = new ParticleSystem({ 0,0,0 });
-	sys->generateExpDemo();
+	sys->generateSpringDemo();
 	//proj = new RPGproyecyile(GetCamera()->getEye(), GetCamera()->getDir());
 }
 

@@ -30,13 +30,16 @@ void WindForceGenerator::updateForce(Particle* particle, double duration)
 void DragForceGenerator::updateForce(Particle* particle, double duration)
 {
 	if (particle->getInvMass() <= 0.0f) return;
-
-	Vector3 force = k * particle->getVel();
+	Vector3 v = particle->getVel();
+	float drag_coef = v.normalize();
+	drag_coef *= k;
+	Vector3 force = -v * drag_coef;
 	particle->addForce(force);
 }
 
 void TwisterForceGenerator::updateForce(Particle* particle, double duration)
 {
+	if (particle->getInvMass() <= 0.0f) return;
 	Vector3 pos = particle->getPos();
 	Vector3 dist = pos - _center;
 	_windVel = _Kt *  Vector3(-(dist.z) - (dist.x), 50 - (dist.y), dist.x - (dist.z));
@@ -53,4 +56,33 @@ void ExplosionForceGenerator::updateForce(Particle* p, double duration)
 	if (dist == 0) dist = 1e-5;
 	Vector3 force = (_k / r) * distV *exp(-t/_kt);
 	if(dist <= _radius) p->addForce(force);
+}
+
+SpringForceGenerator::SpringForceGenerator(Particle* other, float k, float resting_length) : _other(other), _k(k), _resting_length(resting_length)
+{
+}
+
+void SpringForceGenerator::updateForce(Particle* p, double duration) 
+{
+	if (fabs(p->getInvMass()) <= 1e-10) return;
+
+	Vector3 force = _other->getPos() - p->getPos();
+	
+	const float length = force.normalize();
+	const float delta_x = length - _resting_length;
+
+	force *= delta_x * _k;
+
+	p->addForce(force);
+}
+
+AnchoredSpringFG::AnchoredSpringFG(Vector3& position, float k, float resting_length) :
+	SpringForceGenerator(nullptr, k, resting_length)
+{
+	_other = new Particle(position, { 0,0,0 }, { 0,0,0 }, 0, 0, 0, { 1,0,0,1 }, CreateShape(physx::PxBoxGeometry(1, 1, 1)));
+}
+
+AnchoredSpringFG::~AnchoredSpringFG()
+{
+	delete _other;
 }

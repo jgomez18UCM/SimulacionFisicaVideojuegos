@@ -11,7 +11,9 @@ class ParticleSystem{
 protected:
 	std::list<Particle*> _particles;
 	std::list<ParticleGenerator*> _generators;
-	ParticleForceRegistry forces;
+	std::vector<ForceGenerator*> _forceGens;
+	ParticleForceRegistry _forceReg;
+
 	Vector3 pos;
 public:
 	ParticleSystem(Vector3 Pos)  {
@@ -25,7 +27,7 @@ public:
 			}
 		}
 
-		forces.updateForces(t);
+		_forceReg.updateForces(t);
 
 		for (auto it = _particles.begin(); it != _particles.end();) {
 			(*it)->integrate(t);
@@ -37,7 +39,7 @@ public:
 						_particles.push_back(i);
 					}
 				}
-				forces.deleteParticleregistry(*it);
+				_forceReg.deleteParticleregistry(*it);
 				delete (*it);
 				it = _particles.erase(it);
 			}
@@ -73,24 +75,33 @@ public:
 		Particle* part = new Particle({ 10,10,10 }, { 0,0,0 }, { 0,0,0 },
 			0.99, 10, 10, { 1,0,0,1 }, CreateShape(physx::PxSphereGeometry(10)), true);
 		GravityForceGenerator* gen = new GravityForceGenerator(Vector3(0,-9.8,0), 100);
-		forces.addRegistry(gen, part);
+		_forceReg.addRegistry(gen, part);
 		_particles.push_back(part);
+		_forceGens.push_back(gen);
 	}
 	void generateWindDemo() {
 		Particle* part = new Particle({ 10,10,10 }, { 0,0,0 }, { 0,0,0 },
 			0.99, 10, 100000, { 1,0,0,1 }, CreateShape(physx::PxSphereGeometry(10)), true);
 		WindForceGenerator* gen = new WindForceGenerator(Vector3(5, 0, 0), 1,0.1);
-		forces.addRegistry(gen, part);
+		_forceReg.addRegistry(gen, part);
 		_particles.push_back(part);
+		_forceGens.push_back(gen);
 	}
 	void generateTwisterDemo() {
-		Particle* part = new Particle({ 10,0,10 }, { 0,0,0 }, { 0,0,0 },
-			0.99, 10, 100000, { 1,0,0,1 }, CreateShape(physx::PxSphereGeometry(10)), true);
+		Particle* part = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 },
+			0.99, 10, 100000, { 1,0,0,1 }, CreateShape(physx::PxSphereGeometry(1)), false);
+		GaussianParticleGenerator* g = new GaussianParticleGenerator("nombre", part, 100, { 20,20,20 }, { 0.00001,.000001,.00001 }, 100);
+		
 		Particle* part2 = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 },
 			0.99, 10, 100000, { 1,0,0,1 }, CreateShape(physx::PxBoxGeometry(1,1,1)), true);
 		TwisterForceGenerator* gen = new TwisterForceGenerator(Vector3(0, 0, 0), 1, 0.1, 0.75);
-		forces.addRegistry(gen, part);
-		_particles.push_back(part);
+		for (auto p : g->generateParticles()) {
+			_particles.push_back(p);
+			_forceReg.addRegistry( gen,p );
+		}
+		_forceReg.addRegistry(gen, part);
+		_forceGens.push_back(gen);
+		//_particles.push_back(part);
 	}
 	void generateExpDemo() {
 		Particle* part = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 1, 100000, { 0,0,1,1 });
@@ -98,10 +109,39 @@ public:
 		ParticleGenerator* gen = new GaussianParticleGenerator("JAJA", model, 100, {2,2,2},{0.00001,0.00001,0.000001},10);
 		ExplosionForceGenerator* exp = new ExplosionForceGenerator({ 0,0,0 }, 10, 100, .25);
 		for (auto p : gen->generateParticles()) {
-			forces.addRegistry(exp, p);
+			_forceReg.addRegistry(exp, p);
 			_particles.push_back(p);
 		}
 		delete gen;
+		_forceGens.push_back(exp);
+	}
+
+	void generateAnchoredSpringDemo() {
+		Particle* p = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 5, 1e10);
+		AnchoredSpringFG* spring = new AnchoredSpringFG(Vector3(-10,0,0), 2, 5);
+		_forceReg.addRegistry(spring, p);
+		DragForceGenerator* drag = new DragForceGenerator(.5);
+		_forceReg.addRegistry(drag, p);
+		_particles.push_back(p);
+		_forceGens.push_back(drag);
+		_forceGens.push_back(spring);
+	}
+
+	void generateSpringDemo() {
+		Particle* p1 = new Particle({ 10,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 5, 1e10);
+		Particle* p2 = new Particle({ -10,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 5, 1e10, {1,0,1,1});
+		SpringForceGenerator* spring1 = new SpringForceGenerator(p1, 2, 5);
+		SpringForceGenerator* spring2 = new SpringForceGenerator(p2, 2, 5);
+		_forceReg.addRegistry(spring1, p2);
+		_forceReg.addRegistry(spring2, p1);
+		DragForceGenerator* drag = new DragForceGenerator(.5);
+		_forceReg.addRegistry(drag, p1);
+		_forceReg.addRegistry(drag, p2);
+		_particles.push_back(p1);
+		_particles.push_back(p2);
+		_forceGens.push_back(drag);
+		_forceGens.push_back(spring1);
+		_forceGens.push_back(spring2);
 	}
 
 	virtual ~ParticleSystem() {
@@ -111,6 +151,8 @@ public:
 		for (auto gen = _generators.begin(); gen != _generators.end(); gen = _generators.erase(gen) ) {
 			delete (*gen);
 		}
-			
+		for (auto gen = _forceGens.begin(); gen != _forceGens.end(); gen = _forceGens.erase(gen)) {
+			delete (*gen);
+		}
 	};
 };
