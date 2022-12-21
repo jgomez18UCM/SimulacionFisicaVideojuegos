@@ -14,6 +14,11 @@
     <ClCompile Include="Firework.cpp" />
     <ClCompile Include="SphereParticleGenerator.cpp" />
     <ClCompile Include="ForceGenerator.cpp" />
+    <ClCompile Include="RigidBody.cpp" />
+    <ClCompile Include="WorldManager.cpp" />
+    <ClCompile Include="RigidBodyGenerator.cpp" />
+    <ClCompile Include="RigidBodyFG.cpp" />
+    <ClCompile Include="RBForceRegistry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -35,6 +40,11 @@
     <ClInclude Include="SphereParticleGenerator.h" />
     <ClInclude Include="ForceGenerator.h" />
     <ClInclude Include="ParticleForceRegistry.h" />
+    <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="WorldManager.h" />
+    <ClInclude Include="RigidBodyGenerator.h" />
+    <ClInclude Include="RigidBodyFG.h" />
+    <ClInclude Include="RBForceRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

@@ -12,7 +12,10 @@
 
 #include "Particle.h"
 #include "Proyectile.h"
+#include "WorldManager.h"
 #include "ParticleSystem.h"
+
+#include "RigidBody.h"
 
 
 using namespace physx;
@@ -35,7 +38,8 @@ Particle*				suelo;
 Projectile*				proj;
 std::vector<Projectile*> projs;
 ParticleSystem* sys;
-
+RigidBody* rg;
+WorldManager* wm;
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -61,7 +65,18 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 	//suelo = new Floor(Vector3(0, -10, 0), 1000, 1000);
 	sys = new ParticleSystem({ 0,0,0 });
-	sys->generateBuoyancyDemo();
+	//sys->generateBuoyancyDemo();
+
+	/*PxRigidDynamic* rigid;
+	rigid = gPhysics->createRigidDynamic(physx::PxTransform({ 0,0,0 }));
+	rigid->setMass(10);
+	PxShape* shape = CreateShape(PxBoxGeometry(Vector3(.5,.5,.5)));
+	rigid->attachShape(*shape);
+	physx::PxRigidBodyExt::updateMassAndInertia(*rigid, 1);
+	gScene->addActor(*rigid);*/
+	//rg = new RigidBody(rigid, 10, { 1,1,1,1 });
+	wm = new WorldManager(gScene, gPhysics);
+	wm->generatorDemo(); 
 	//proj = new RPGproyecyile(GetCamera()->getEye(), GetCamera()->getDir());
 }
 
@@ -75,6 +90,7 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+	wm->update(t);
 	for (auto it = projs.begin(); it != projs.end();) {
 		(*it)->integrate(t);
 		if (!(*it)->isAlive()) {
@@ -95,6 +111,7 @@ void cleanupPhysics(bool interactive)
 	PX_UNUSED(interactive);
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
+	delete rg;
 	gScene->release();
 	gDispatcher->release();
 	// -----------------------------------------------------
@@ -110,6 +127,7 @@ void cleanupPhysics(bool interactive)
 		it = projs.erase(it);
 	}
 	delete sys;
+	
 }
 
 // Function called when a key is pressed

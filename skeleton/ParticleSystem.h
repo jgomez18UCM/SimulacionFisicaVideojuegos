@@ -163,9 +163,9 @@ public:
 
 	void generateBuoyancyDemo() {
 		Particle* liquid = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 0, 1e10, { 0,0,1,1 }, CreateShape(physx::PxBoxGeometry(20, 2, 20)));
-		Particle* p = new Particle({ 0,-5, 0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 5, 1e10, { 1,0,0,1 }, CreateShape(physx::PxBoxGeometry(3, 3, 3)));
+		Particle* p = new Particle({ 0,-5, 0 }, { 0,0,0 }, { 0,0,0 }, 0.90, 20000, 1e10, { 1,0,0,1 }, CreateShape(physx::PxBoxGeometry(3, 3, 3)));
 
-		BuoyancyForceGenerator* bg = new BuoyancyForceGenerator(5, 27, 1, liquid);
+		BuoyancyForceGenerator* bg = new BuoyancyForceGenerator(5, 27, 1000, liquid);
 		GravityForceGenerator* gg = new GravityForceGenerator(Vector3(0,-9.8,0), 0);
 		_forceReg.addRegistry(bg, p);
 		_forceReg.addRegistry(gg, p);
