@@ -76,7 +76,7 @@ void initPhysics(bool interactive)
 	gScene->addActor(*rigid);*/
 	//rg = new RigidBody(rigid, 10, { 1,1,1,1 });
 	wm = new WorldManager(gScene, gPhysics);
-	wm->generatorDemo(); 
+	 
 	//proj = new RPGproyecyile(GetCamera()->getEye(), GetCamera()->getDir());
 }
 
@@ -134,24 +134,24 @@ void cleanupPhysics(bool interactive)
 void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
-
+	wm->getPlayer()->handleKey(toupper(key));
 	switch(toupper(key))
 	{
 	//case 'B': break;
 	//case ' ':	break;
 	case '1':
 	{
-		projs.push_back(new Projectile(GetCamera()->getEye(), GetCamera()->getDir(), Projectile::RPG));
+		wm->Wind();
 		break;
 	}
 	case '2':
-		projs.push_back(new Projectile(GetCamera()->getEye(), GetCamera()->getDir(), Projectile::Pistol));
+		wm->Twister();
 		break;
 	case '3':
-		sys->generateFireworksSystem();
+		sys->generateSpringDemo();
 		break;
 	case '4':
-		sys->generateFogSystem();
+		sys->generateFireworksSystem();
 		break;
 	default:
 		break;

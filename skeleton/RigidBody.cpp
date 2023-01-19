@@ -8,6 +8,7 @@ RigidBody::RigidBody(physx::PxRigidDynamic* rigid, double time, Vector4 color) {
 	physx::PxShape* shape;
 	_rigid->getShapes(&shape, 1);
 	_render_item = new RenderItem(shape, _rigid, color);
+	
 }
 
 RigidBody::RigidBody(physx::PxScene* scene, physx::PxPhysics* physx,  Vector3 pos, Vector3 vel, double mass, double time, Vector3 dims, Shape s, Vector4 color)
@@ -43,7 +44,7 @@ RigidBody::RigidBody(physx::PxScene* scene, physx::PxPhysics* physx,  Vector3 po
 
 RigidBody::~RigidBody() {
 	_rigid->release();
-	DeregisterRenderItem(_render_item);
+	if(_render_item!=nullptr)DeregisterRenderItem(_render_item);
 }
 
 void RigidBody::update(double t) {
@@ -51,6 +52,7 @@ void RigidBody::update(double t) {
 }
 
 bool RigidBody::isAlive() {
+	if (_lifeTime < 0) return true;
 	return _life < _lifeTime;
 }
 
@@ -81,6 +83,19 @@ float RigidBody::getInvMass() const
 {
 	if (_rigid->getMass() <= 0) return -1;
 	return _rigid->getInvMass();
+}
+
+void RigidBody::setLinearVelocity(Vector3& vel)
+{
+	_rigid->setLinearVelocity(vel);
+}
+
+void RigidBody::unrender()
+{
+	if (_render_item != nullptr) {
+		DeregisterRenderItem(_render_item);
+		_render_item = nullptr;
+	}
 }
 
 

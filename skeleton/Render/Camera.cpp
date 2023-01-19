@@ -56,7 +56,7 @@ void Camera::handleMouse(int button, int state, int x, int y)
 
 bool Camera::handleKey(unsigned char key, int x, int y, float speed)
 {
-	PX_UNUSED(x);
+	/*PX_UNUSED(x);
 	PX_UNUSED(y);
 
 	PxVec3 viewY = mDir.cross(PxVec3(0,1,0)).getNormalized();
@@ -68,7 +68,8 @@ bool Camera::handleKey(unsigned char key, int x, int y, float speed)
 	case 'D':	mEye += viewY*2.0f*speed;		break;
 	default:							return false;
 	}
-	return true;
+	return true;*/
+	return false;
 }
 
 void Camera::handleAnalogMove(float x, float y)
@@ -105,6 +106,11 @@ PxTransform Camera::getTransform() const
 
 	PxMat33 m(mDir.cross(viewY), viewY, -mDir);
 	return PxTransform(mEye, PxQuat(m));
+}
+
+void Camera::setPosition(physx::PxVec3 newPos)
+{
+	mEye = newPos;
 }
 
 PxVec3 Camera::getEye() const

@@ -23,6 +23,10 @@ public:
 		else inverse_mass = 1.0f / mass;
 		this->mass = mass;
 	}
+	virtual void setColor(Vector4& color) {
+		if(renderItem!=nullptr)DeregisterRenderItem(renderItem);
+		renderItem = new RenderItem(shape, &pose, color);
+	}
 	virtual void clearForce() { force*=0; }
 	virtual void addForce(Vector3 f) { force += f; }
 	virtual Vector3 getPos() { return this->pose.p; };

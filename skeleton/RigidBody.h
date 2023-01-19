@@ -24,6 +24,10 @@ public:
 	float getMass() const;
 	float getInvMass() const;
 
+	void setLinearVelocity(Vector3& vel);
+	void unrender();
+	void setMass(float mass) { _rigid->setMass(mass); };
+
 protected:
 	physx::PxRigidDynamic* _rigid;
 	RenderItem* _render_item;

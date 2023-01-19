@@ -37,6 +37,9 @@ public:
 				if (f != nullptr) {
 					for (auto i : f->explode() ){
 						_particles.push_back(i);
+						for (auto g : _forceGens) {
+							_forceReg.addRegistry(g, i);
+						}
 					}
 				}
 				_forceReg.deleteParticleregistry(*it);
@@ -56,14 +59,19 @@ public:
 		}
 	};
 	void generateFireworksSystem() { 
-		Particle* i = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 2.0f, 2, {0,1,0,1}, CreateShape(physx::PxSphereGeometry(1)), false);
-
+		Particle* i = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 2.0f, 2, {0,1,0,1}, CreateShape(physx::PxSphereGeometry(.5)), false);
 		std::shared_ptr<SphereParticleGenerator> p;
-		p.reset(new SphereParticleGenerator(20, { 0,30,0 }, i, 20));
-		Firework* f = new Firework(pos, { 0,20,0 }, { 0,0,0 }, 0.99, 3.0f, 1.5, { 1,0,0,1 }, CreateShape(physx::PxSphereGeometry(3)), {p});
+		p.reset(new SphereParticleGenerator(10, { 0,0,0 }, i, 3));
+		Firework* f1 = new Firework({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 3.0f, 1.5, { 1,1,0,1 }, CreateShape(physx::PxSphereGeometry(1)), false, { p });
+		
+		std::shared_ptr<SphereParticleGenerator> p1;
+		p1.reset(new SphereParticleGenerator(10, { 0,0,0 }, f1, 10));
+		Firework* f = new Firework({-20,2,0}, {0,40,0}, {0,0,0}, 0.99, 3.0f, 2, {1,0,0,1}, CreateShape(physx::PxSphereGeometry(2)), true, {p, p1});
+		
 		_particles.push_back(f);
-
-
+		GravityForceGenerator* gen = new GravityForceGenerator(Vector3(0, -9.8, 0), 100);
+		_forceReg.addRegistry(gen, f);
+		_forceGens.push_back(gen);
 	};
 	void generateFogSystem() {
 		if (getParticleGenerator("Fog") == nullptr) {
@@ -104,8 +112,8 @@ public:
 		//_particles.push_back(part);
 	}
 	void generateExpDemo() {
-		Particle* part = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 1, 100000, { 0,0,1,1 });
-		Particle* model = new Particle({ 0,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 10, 25, { 1,1,1,1 }, CreateShape(physx::PxSphereGeometry(1)), false);
+		Particle* part = new Particle({ 20,3,15 }, { 0,0,0 }, { 0,0,0 }, 0.99, 1, 100000, { 0,0,1,1 });
+		Particle* model = new Particle({ 20,3,15 }, { 0,0,0 }, { 0,0,0 }, 0.99, 10, 25, { 1,1,1,1 }, CreateShape(physx::PxSphereGeometry(1)), false);
 		ParticleGenerator* gen = new GaussianParticleGenerator("JAJA", model, 100, {2,2,2},{0.00001,0.00001,0.000001},10);
 		ExplosionForceGenerator* exp = new ExplosionForceGenerator({ 0,0,0 }, 10, 100, .25);
 		for (auto p : gen->generateParticles()) {
@@ -128,8 +136,8 @@ public:
 	}
 
 	void generateSpringDemo() {
-		Particle* p1 = new Particle({ 10,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 5, 1e10);
-		Particle* p2 = new Particle({ -10,0,0 }, { 0,0,0 }, { 0,0,0 }, 0.99, 5, 1e10, {1,0,1,1});
+		Particle* p1 = new Particle({ 20,3,35 }, { 0,0,0 }, { 0,0,0 }, 0.99, 5, 30);
+		Particle* p2 = new Particle({ 20,3,45 }, { 0,0,0 }, { 0,0,0 }, 0.99, 5, 30, {1,0,1,1});
 		SpringForceGenerator* spring1 = new SpringForceGenerator(p1, 2, 5);
 		SpringForceGenerator* spring2 = new SpringForceGenerator(p2, 2, 5);
 		_forceReg.addRegistry(spring1, p2);

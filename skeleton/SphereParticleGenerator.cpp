@@ -1,4 +1,5 @@
 #include "SphereParticleGenerator.h"
+#include "Firework.h"
 
 SphereParticleGenerator::SphereParticleGenerator(int numParticles, Vector3 pos, Particle* model, float radius)
 {
@@ -28,10 +29,20 @@ std::list<Particle*> SphereParticleGenerator::generateParticles()
 		float z = cos(phi);
 
 		Vector3 vel(x, y, z);
-		Particle* p = _model->clone();
-		p->setPos(_mean_pos);
-		p->setVel(vel.getNormalized() * 20);
-		l.push_back(p);
+		Firework* f = dynamic_cast<Firework*>(_model);
+		if (f != nullptr) {
+			Firework* clone = f->cloneFirework();
+			clone->setPos(_mean_pos);
+			clone->setVel(vel.getNormalized() * 20);
+			l.push_back(clone);
+		}
+		else {
+			Particle* p = _model->clone();
+			p->setPos(_mean_pos);
+			p->setVel(vel.getNormalized() * 20);
+			l.push_back(p);
+		}
+		
 		
 	}
 	return l;

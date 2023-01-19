@@ -12,6 +12,9 @@ public:
 	void setName(std::string name) { _name = name; }
 	void setParticle(Particle* part) { _model = part; }
 	virtual ~ParticleGenerator(){};
+	virtual void setMeanPos(Vector3& pos) {
+		_mean_pos = pos;
+	}
 
 protected:
 	Vector3 _mean_pos, _mean_vel, _mean_acc;
