@@ -1,8 +1,10 @@
-# SimulacionFisicaVideojuegos
-Repositorio de las prácticas de la asignatura de Simulación Física de Videojuegos
+# Manual de Jugador
 
-En la carpeta skeleton estará vuestro código fuente
+El jugador puede mover la cámara pulsando cualquier botón del ratón sobre la pantalla y moviendo el ratón.
 
-Necesitaréis además descomprimir el archivo que se indica a continuación en la raíz del repositorio:
+El jugador se puede mover hacia delante, izquierda, derecha o atras (solo una de las 4 direcciones) usando WASD.
 
-Carpetas bin y common https://ucomplutense-my.sharepoint.com/:u:/g/personal/davalejo_ucm_es/EZcsdyIoqTFOrF4hdfkVYk0BJZ9IycJ3QqXQFwaXVrlSKg?e=pfs6IO
+Pulsando 1 aparecerá una demo de viento en la sala más cercana al punto de spawn
+Pulsando 2 aparecerá una demo de tornado en la siguiente sala
+Pulsando 3 aparecerá una demo de muelle en la sala más lejana al punto de spawn
+Pulsando 4 aparecerá un fuego artificial en el centro del mundo
