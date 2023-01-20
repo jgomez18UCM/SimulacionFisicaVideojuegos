@@ -65,6 +65,7 @@ SpringForceGenerator::SpringForceGenerator(Particle* other, float k, float resti
 void SpringForceGenerator::updateForce(Particle* p, double duration) 
 {
 	if (fabs(p->getInvMass()) <= 1e-10) return;
+	
 
 	Vector3 force = _other->getPos() - p->getPos();
 	

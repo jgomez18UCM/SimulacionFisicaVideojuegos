@@ -12,6 +12,7 @@ protected:
 	std::list<Particle*> _particles;
 	std::list<ParticleGenerator*> _generators;
 	std::vector<ForceGenerator*> _forceGens;
+	std::vector<ForceGenerator*> _localForceGens;
 	ParticleForceRegistry _forceReg;
 
 	Vector3 pos;
@@ -147,9 +148,9 @@ public:
 		_forceReg.addRegistry(drag, p2);
 		_particles.push_back(p1);
 		_particles.push_back(p2);
-		_forceGens.push_back(drag);
-		_forceGens.push_back(spring1);
-		_forceGens.push_back(spring2);
+		_localForceGens.push_back(drag);
+		_localForceGens.push_back(spring1);
+		_localForceGens.push_back(spring2);
 	}
 
 	void generateBungeeDemo() {
@@ -189,6 +190,9 @@ public:
 			delete (*gen);
 		}
 		for (auto gen = _forceGens.begin(); gen != _forceGens.end(); gen = _forceGens.erase(gen)) {
+			delete (*gen);
+		}
+		for (auto gen = _localForceGens.begin(); gen != _localForceGens.end(); gen = _localForceGens.erase(gen)) {
 			delete (*gen);
 		}
 	};
